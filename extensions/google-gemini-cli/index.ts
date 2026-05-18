@@ -41,8 +41,10 @@ const REDIRECT_URI = "http://localhost:8085/oauth2callback";
 const AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const CODE_ASSIST_ENDPOINT = "https://cloudcode-pa.googleapis.com";
-const CLIENT_ID_ENV = "GOOGLE_GEMINI_CLI_OAUTH_CLIENT_ID";
-const CLIENT_SECRET_ENV = "GOOGLE_GEMINI_CLI_OAUTH_CLIENT_SECRET";
+const CLIENT_ID = atob(
+	"NjgxMjU1ODA5Mzk1LW9vOGZ0Mm9wcmRybnA5ZTNhcWY2YXYzaG1kaWIxMzVqLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29t",
+);
+const CLIENT_SECRET = atob("R09DU1BYLTR1SGdNUG0tMW83U2stZ2VWNkN1NWNsWEZzeGw=");
 const SCOPES = [
 	"https://www.googleapis.com/auth/cloud-platform",
 	"https://www.googleapis.com/auth/userinfo.email",
@@ -453,17 +455,6 @@ function parseRedirectUrl(input: string): { code?: string; state?: string } {
 	}
 }
 
-function getOAuthClientCredentials(): { clientId: string; clientSecret: string } {
-	const clientId = process.env[CLIENT_ID_ENV];
-	const clientSecret = process.env[CLIENT_SECRET_ENV];
-	if (!clientId || !clientSecret) {
-		throw new Error(
-			`Google Gemini CLI OAuth requires ${CLIENT_ID_ENV} and ${CLIENT_SECRET_ENV} environment variables.`,
-		);
-	}
-	return { clientId, clientSecret };
-}
-
 function wait(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -622,13 +613,12 @@ async function getUserEmail(accessToken: string): Promise<string | undefined> {
 }
 
 async function refreshGoogleCloudToken(refreshToken: string, projectId: string): Promise<GeminiCliCredentials> {
-	const { clientId, clientSecret } = getOAuthClientCredentials();
 	const response = await fetch(TOKEN_URL, {
 		method: "POST",
 		headers: { "Content-Type": "application/x-www-form-urlencoded" },
 		body: new URLSearchParams({
-			client_id: clientId,
-			client_secret: clientSecret,
+			client_id: CLIENT_ID,
+			client_secret: CLIENT_SECRET,
 			refresh_token: refreshToken,
 			grant_type: "refresh_token",
 		}),
@@ -647,14 +637,13 @@ async function refreshGoogleCloudToken(refreshToken: string, projectId: string):
 }
 
 async function loginGeminiCli(callbacks: OAuthLoginCallbacks): Promise<GeminiCliCredentials> {
-	const { clientId, clientSecret } = getOAuthClientCredentials();
 	const { verifier, challenge } = await generatePKCE();
 	callbacks.onProgress?.("Starting local server for OAuth callback...");
 	const callbackServer = await startCallbackServer();
 
 	try {
 		const authParams = new URLSearchParams({
-			client_id: clientId,
+			client_id: CLIENT_ID,
 			response_type: "code",
 			redirect_uri: REDIRECT_URI,
 			scope: SCOPES.join(" "),
@@ -679,8 +668,8 @@ async function loginGeminiCli(callbacks: OAuthLoginCallbacks): Promise<GeminiCli
 			method: "POST",
 			headers: { "Content-Type": "application/x-www-form-urlencoded" },
 			body: new URLSearchParams({
-				client_id: clientId,
-				client_secret: clientSecret,
+				client_id: CLIENT_ID,
+				client_secret: CLIENT_SECRET,
 				code,
 				grant_type: "authorization_code",
 				redirect_uri: REDIRECT_URI,
