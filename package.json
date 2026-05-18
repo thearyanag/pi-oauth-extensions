@@ -1,0 +1,15 @@
+{
+	"name": "pi-gemini-oauth-extension",
+	"version": "0.1.0",
+	"description": "Pi extension that restores the google-gemini-cli OAuth provider.",
+	"type": "module",
+	"private": true,
+	"keywords": ["pi-package", "pi-extension", "gemini", "oauth"],
+	"pi": {
+		"extensions": ["./extensions/google-gemini-cli"]
+	},
+	"peerDependencies": {
+		"@earendil-works/pi-ai": "*",
+		"@earendil-works/pi-coding-agent": "*"
+	}
+}
