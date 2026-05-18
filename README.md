@@ -1,5 +1,7 @@
 # Pi Gemini OAuth Extension
 
+![Pi Gemini OAuth Extension](assets/pi-gemini-oauth-banner.png)
+
 Restores Pi's removed `google-gemini-cli` OAuth provider as an installable Pi extension.
 
 The provider ID is `google-gemini-cli`. Existing credentials stored for that provider are reused.
