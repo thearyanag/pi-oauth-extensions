@@ -1,11 +1,13 @@
 # Pi OAuth Extensions
 
-![Pi OAuth Extensions](assets/pi-gemini-oauth-banner.png)
+![Pi OAuth Extensions](assets/pi-oauth-extensions-banner.png)
 
-Installable Pi extensions for OAuth-backed providers:
+Installable OAuth provider extensions for Pi.
 
-- `google-gemini-cli`
-- `xai`
+Included providers:
+
+- `google-gemini-cli` for Google Cloud Code Assist / Gemini CLI OAuth
+- `xai` for xAI / Grok OAuth
 
 ## Install
 
@@ -29,18 +31,19 @@ pi -e git:github.com/thearyanag/pi-gemini-oauth-extension \
   -p "Reply with exactly: ok"
 ```
 
-## Gemini Login
+## Login
 
-If you do not already have `google-gemini-cli` credentials:
+Start Pi with the extension package loaded:
 
 ```bash
 pi -e git:github.com/thearyanag/pi-gemini-oauth-extension
 ```
 
-Then run:
+Then log in to either provider:
 
 ```text
 /login google-gemini-cli
+/login xai
 ```
 
 For paid or Workspace Cloud Code Assist accounts, set one of:
@@ -50,21 +53,7 @@ export GOOGLE_CLOUD_PROJECT=your-project-id
 export GOOGLE_CLOUD_PROJECT_ID=your-project-id
 ```
 
-## xAI Login
-
-If you do not already have `xai` credentials:
-
-```bash
-pi -e git:github.com/thearyanag/pi-gemini-oauth-extension
-```
-
-Then run:
-
-```text
-/login xai
-```
-
-The login flow offers:
+xAI login offers:
 
 - Browser OAuth on `http://127.0.0.1:56121/callback`
 - Device-code OAuth for SSH, Docker, VPS, or other headless environments
