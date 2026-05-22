@@ -1,10 +1,11 @@
-# Pi Gemini OAuth Extension
+# Pi OAuth Extensions
 
-![Pi Gemini OAuth Extension](assets/pi-gemini-oauth-banner.png)
+![Pi OAuth Extensions](assets/pi-gemini-oauth-banner.png)
 
-Restores Pi's removed `google-gemini-cli` OAuth provider as an installable Pi extension.
+Installable Pi extensions for OAuth-backed providers:
 
-The provider ID is `google-gemini-cli`. Existing credentials stored for that provider are reused.
+- `google-gemini-cli`
+- `xai`
 
 ## Install
 
@@ -21,7 +22,14 @@ pi -e git:github.com/thearyanag/pi-gemini-oauth-extension \
   -p "Reply with exactly: ok"
 ```
 
-## Login
+```bash
+pi -e git:github.com/thearyanag/pi-gemini-oauth-extension \
+  --provider xai \
+  --model grok-4.3 \
+  -p "Reply with exactly: ok"
+```
+
+## Gemini Login
 
 If you do not already have `google-gemini-cli` credentials:
 
@@ -42,10 +50,39 @@ export GOOGLE_CLOUD_PROJECT=your-project-id
 export GOOGLE_CLOUD_PROJECT_ID=your-project-id
 ```
 
+## xAI Login
+
+If you do not already have `xai` credentials:
+
+```bash
+pi -e git:github.com/thearyanag/pi-gemini-oauth-extension
+```
+
+Then run:
+
+```text
+/login xai
+```
+
+The login flow offers:
+
+- Browser OAuth on `http://127.0.0.1:56121/callback`
+- Device-code OAuth for SSH, Docker, VPS, or other headless environments
+
+To force the device-code flow:
+
+```bash
+PI_XAI_OAUTH_FLOW=device-code pi -e git:github.com/thearyanag/pi-gemini-oauth-extension
+```
+
 ## Usage
 
 ```bash
 pi --provider google-gemini-cli --model gemini-2.5-flash -p "Hello"
+```
+
+```bash
+pi --provider xai --model grok-4.3 --thinking low -p "Hello"
 ```
 
 RPC mode:
@@ -56,7 +93,13 @@ pi --mode rpc \
   --model gemini-2.5-flash
 ```
 
-## Models
+```bash
+pi --mode rpc \
+  --provider xai \
+  --model grok-4.3
+```
+
+## Gemini Models
 
 - `gemini-2.0-flash`
 - `gemini-2.5-flash`
@@ -66,8 +109,20 @@ pi --mode rpc \
 - `gemini-3.1-flash-lite-preview`
 - `gemini-3.1-pro-preview`
 
+## xAI Models
+
+- `grok-4.3`
+- `grok-build-0.1`
+- `grok-4.20-beta-latest-reasoning`
+- `grok-4.20-beta-latest-non-reasoning`
+- `grok-4.20-0309-reasoning`
+- `grok-4.20-0309-non-reasoning`
+- `grok-code-fast-1`
+
 ## Notes
 
 - This extension targets Pi versions where `google-gemini-cli` is no longer built in.
 - It uses the Google Cloud Code Assist OAuth flow and Cloud Code Assist streaming API.
+- xAI OAuth follows OpenClaw's Grok OAuth flow and uses xAI OIDC discovery, browser OAuth, refresh tokens, and device-code login.
+- The xAI extension registers xAI models on the OpenAI Responses transport when loaded.
 - Tested against source Pi `0.75.3` with print mode and RPC mode.
