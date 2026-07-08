@@ -27,7 +27,7 @@ pi -e git:github.com/thearyanag/pi-gemini-oauth-extension \
 ```bash
 pi -e git:github.com/thearyanag/pi-gemini-oauth-extension \
   --provider xai \
-  --model grok-4.3 \
+  --model grok-4.5 \
   -p "Reply with exactly: ok"
 ```
 
@@ -71,7 +71,7 @@ pi --provider google-gemini-cli --model gemini-2.5-flash -p "Hello"
 ```
 
 ```bash
-pi --provider xai --model grok-4.3 --thinking low -p "Hello"
+pi --provider xai --model grok-4.5 --thinking low -p "Hello"
 ```
 
 RPC mode:
@@ -85,7 +85,7 @@ pi --mode rpc \
 ```bash
 pi --mode rpc \
   --provider xai \
-  --model grok-4.3
+  --model grok-4.5
 ```
 
 ## Gemini Models
@@ -100,18 +100,16 @@ pi --mode rpc \
 
 ## xAI Models
 
-- `grok-4.3`
 - `grok-build-0.1`
+- `grok-4.5`
+- `grok-4.3`
 - `grok-4.20-beta-latest-reasoning`
 - `grok-4.20-beta-latest-non-reasoning`
-- `grok-4.20-0309-reasoning`
-- `grok-4.20-0309-non-reasoning`
-- `grok-code-fast-1`
 
 ## Notes
 
 - This extension targets Pi versions where `google-gemini-cli` is no longer built in.
 - It uses the Google Cloud Code Assist OAuth flow and Cloud Code Assist streaming API.
 - xAI OAuth follows OpenClaw's Grok OAuth flow and uses xAI OIDC discovery, browser OAuth, refresh tokens, and device-code login.
-- The xAI extension registers xAI models on the OpenAI Responses transport when loaded.
+- The xAI extension registers xAI models on the OpenAI Responses transport when loaded and can augment them from the live Grok OAuth model catalog after login.
 - Tested against source Pi `0.75.3` with print mode and RPC mode.
